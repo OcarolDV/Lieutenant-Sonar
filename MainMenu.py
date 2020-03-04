@@ -1,7 +1,10 @@
 import pygame
 import random
 import DotGAME
+from networkTutorial import Network
 
+
+# ajgoiadfoghasdoipfg;ojsdfhng;lhslfdglkajdfglk;sdfjglkdafjg
 pygame.init()
 
 win = pygame.display.set_mode((1600, 900))
@@ -41,6 +44,7 @@ playD = button(20, 250, 300, 80)
 settingsD = button(20, 400, 598, 104)
 creditsD = button(20, 550, 418, 68)
 helpD = button(20, 700, 84, 82)
+n = Network()
 while True:
     (mouseX, mouseY) = pygame.mouse.get_pos()
 
