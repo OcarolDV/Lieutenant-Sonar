@@ -58,6 +58,16 @@ ySubX = False
 yAtkX = False
 yAtk2X = False
 
+rRadar = box(642, 505, 85, 65)
+rSub1 = box(1179, 399, 85, 65)
+rSub2 = box(1383, 507, 85, 65)
+rAtk = box(1383, 398, 85, 65)
+
+rRadarX = False
+rSub1X = False
+rSub2X = False
+rAtkX = False
+
 pressed1 = False
 
 myTurn = False
@@ -188,5 +198,51 @@ while True:
         yAtk2X = False
 
 ############################## YELLOW PIPE ####################################################################################################
+
+############################## RED PIPE ####################################################################################################
+
+    if crossoutSense(rRadar):
+        win.blit(rx, (rRadar.x, rRadar.y))
+        if crossoutClick(rRadarX):
+            rRadarX = True
+            myTurn = False
+
+    if crossoutSense(rSub1):
+        win.blit(rx, (rSub1.x, rSub1.y))
+        if crossoutClick(rSub1X):
+            rSub1X = True
+            myTurn = False
+
+    if crossoutSense(rSub2):
+        win.blit(rx, (rSub2.x, rSub2.y))
+        if crossoutClick(rSub2X):
+            rSub2X = True
+            myTurn = False
+
+    if crossoutSense(rAtk):
+        win.blit(rx, (rAtk.x, rAtk.y))
+        if crossoutClick(rAtkX):
+            rAtkX = True
+            myTurn = False
+
+    if rRadarX == True:
+        win.blit(rx, (rRadar.x, rRadar.y))
+
+    if rSub1X == True:
+        win.blit(rx, (rSub1.x, rSub1.y))
+
+    if rSub2X == True:
+        win.blit(rx, (rSub2.x, rSub2.y))
+
+    if rAtkX == True:
+        win.blit(rx, (rAtk.x, rAtk.y))
+
+    if rRadarX == True and rSub1X == True and rSub2X == True and rAtkX == True:
+        rRadarX = False
+        rSub1X = False
+        rSub2X = False
+        rAtkX = False
+
+############################## RED PIPE ####################################################################################################
 
     pygame.display.update()
