@@ -1,11 +1,18 @@
 import pygame
 import random
 
+pygame.init()
+
 win = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Main Menu")
 
 bg = pygame.image.load('CaptainSonarMAp.jpg')
 bg = pygame.transform.scale(bg, (1920, 1080))
+
+initDot = pygame.image.load('initDot.png')
+currentPos = pygame.image.load('currentPos.png')
+
+Thefont = pygame.font.SysFont('comicsans', 60, False, False)
 
 rowDict = {"A": 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9, 'J': 10, 'K': 11, 'L': 12, 'M': 13, 'N': 14, 'O': 15}
 rowDictNum = {1 : "A", 2 : "B", 3 : "C", 4 : "D", 5 : "E", 6 : "F", 7 : "G", 8 : "H", 9 : "I", 10 : "J", 11 : "K", 12 : "L", 13 : "M", 14 : "N", 15 : "O"}
@@ -16,9 +23,7 @@ startPos = "G6"
 rowNum = rowDict[startPos[0]]
 column = int(startPos[1])
 
-islandDot = ('dotB3', 'dotB4', 'dotD6', 'dotB7', 'dotD10', 'dotC11', 'dotB12', 'dotB13', 'dotA14', 'dotE5', 'dotF5', 'dotG4', 'dotF6',
-             'dotI6', 'dotH6', 'dotG9', 'dotG10', 'dotH10', 'dotJ10', 'dotJ11', 'dotK11', 'dotL6', 'dotL10', 'dotM5', 'dotN3', 'dotN4',
-             'dotN9', 'dotN2', 'dotO2')
+
 
 class click(object):
 
@@ -36,7 +41,15 @@ for i in range(1, 16):
     for k in range(1, 16):
         globals()['dot%s' % rowDictNum[i] + str(k)] = click(globals()['row%s' % i].x, 126 + (58 * k), 8)
 
-width = 1
+width = 5
+
+islandDot = (dotB3, dotB4, dotD6, dotB7, dotD10, dotC11, dotB12, dotB13, dotA14, dotE5, dotF5, dotG4, dotF6,
+             dotI6, dotH6, dotG9, dotG10, dotH10, dotJ10, dotJ11, dotK11, dotL6, dotL10, dotM5, dotN3, dotN4,
+             dotN9, dotN2, dotO2)
+
+islandDotStr = ('dotB3', 'dotB4', 'dotD6', 'dotB7', 'dotD10', 'dotC11', 'dotB12', 'dotB13', 'dotA14', 'dotE5', 'dotF5', 'dotG4', 'dotF6',
+             'dotI6', 'dotH6', 'dotG9', 'dotG10', 'dotH10', 'dotJ10', 'dotJ11', 'dotK11', 'dotL6', 'dotL10', 'dotM5', 'dotN3', 'dotN4',
+             'dotN9', 'dotN2', 'dotO2')
 
 currentDot = dotA1
 dots = [dotA1, dotA2, dotA3, dotA4, dotA5, dotA6, dotA7, dotA8, dotA9, dotA10, dotA11, dotA12, dotA13, dotA14, dotA15,
@@ -56,8 +69,10 @@ dots = [dotA1, dotA2, dotA3, dotA4, dotA5, dotA6, dotA7, dotA8, dotA9, dotA10, d
         dotO1, dotO2, dotO3, dotO4, dotO5, dotO6, dotO7, dotO8, dotO9, dotO10, dotO11, dotO12, dotO13, dotO14, dotO15]
 
 drawLineToggle = False
-
+initDotState = True
 posLine = []
+
+myMove = True
 
 while True:
     (mouseX, mouseY) = pygame.mouse.get_pos()
@@ -69,30 +84,51 @@ while True:
 
     # pygame.draw.rect(win, (255,0,0), (aDot.x, aDot.y, aDot.width, aDot.height))
 
+    #Draws The Dots
     for i in range(1, 16):
-        if globals()['dot%s' % rowDictNum[i] + str(k)] not in islandDot:
+        if globals()['dot%s' % rowDictNum[i] + str(k)] not in islandDotStr:
             pygame.draw.circle(win, (255, 255, 255), (globals()['dot%s' % rowDictNum[i] + str(k)].x, globals()['row%s' % i].y) , globals()['row%s' % i].radius)
         for k in range(1, 16):
-            if 'dot' + rowDictNum[i] + str(k) not in islandDot:
+            if 'dot' + rowDictNum[i] + str(k) not in islandDotStr:
                 pygame.draw.circle(win, (255, 255, 255), (globals()['dot%s' % rowDictNum[i] + str(k)].x, globals()['dot%s' % rowDictNum[i] + str(k)].y), globals()['dot%s' % rowDictNum[i] + str(k)].radius)
                 #print ('dot' + rowDictNum[i] + str(k))
 
 
+
     for dot in dots:
+        if initDotState == False:
+            if dot.y - 7 < mouseY < dot.y + 7:
+                if dot.x - 7 < mouseX < dot.x + 7:
+                    if (currentDot.x + 80 > dot.x) and (currentDot.x - 80 < dot.x) and (currentDot.y - 110 < dot.y) and (currentDot.y + 110 > dot.y) and\
+                    (dots.index(dot) != posInDots + 16) and (dots.index(dot) != posInDots - 16) and (dots.index(dot) != posInDots + 14) and (dots.index(dot) != posInDots - 14):
+                        if dot not in islandDot:
 
-        if dot.y - 7 < mouseY < dot.y + 7:
-            if dot.x - 7 < mouseX < dot.x + 7:
-                if (currentDot.x + 80 > dot.x) and (currentDot.x - 80 < dot.x) and (currentDot.y - 110 < dot.y) and (currentDot.y + 110 > dot.y) and\
-                   (dots.index(dot) != posInDots + 16) and (dots.index(dot) != posInDots - 16) and (dots.index(dot) != posInDots + 14) and (dots.index(dot) != posInDots - 14):
+                            pygame.draw.circle(win, (20, 255, 20), (dot.x, dot.y), dot.radius)
 
-                    pygame.draw.circle(win, (20, 255, 20), (dot.x, dot.y), dot.radius)
+                            if pressed1:
+                                posLine.append(((currentDot.x, currentDot.y), (dot.x, dot.y)))
+                                currentDot = dot
+                    else:
+                        pygame.draw.circle(win, (255, 20, 20), (dot.x, dot.y), dot.radius)
+        elif initDotState == True:
+            if dot not in islandDot:
+                if dot.y - 7 < mouseY < dot.y + 7:
+                    if dot.x - 7 < mouseX < dot.x + 7:
+                        pygame.draw.circle(win, (20, 255, 20), (dot.x, dot.y), dot.radius)
+                        if pressed1:
+                            currentDot = dot
+                            initDotState = False
 
-                    if pressed1:
-                        posLine.append(((currentDot.x, currentDot.y), (dot.x, dot.y)))
-                        currentDot = dot
-                else:
-                    pygame.draw.circle(win, (255, 20, 20), (dot.x, dot.y), dot.radius)
+    if initDotState == True:
+        win.blit(initDot, (1150, 45))
+    # elif initDotState == False:
+    #     win.blit(currentPos, (1150, 45))
+    #     # dot = str(currentDot)
+    #     dotPos = Thefont.render("currentDot", 1, (200, 200, 200))
+    #     win.blit(dotPos, (1390, 45))
 
+    if initDotState == False:
+        pygame.draw.circle(win, (75, 100, 255), (currentDot.x, currentDot.y), currentDot.radius + 5)
 
     for pos in posLine:
         pygame.draw.line(win, (5, 5, 5), pos[0], pos[1], width)
