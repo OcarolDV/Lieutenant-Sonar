@@ -10,7 +10,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.quit():
             pygame.quit()
-            sys.exit()
+           # sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             for box in textBoxes:
                 box.check_click(pygame.mouse.get_pos())
