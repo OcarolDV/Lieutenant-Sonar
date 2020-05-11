@@ -1,10 +1,13 @@
 import pygame
 import random
+from network import Network
 
 pygame.init()
 
 win = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Engineer")
+
+
 
 bg = pygame.image.load('EngineerScreen.jpg')
 bg = pygame.transform.scale(bg, (1920, 1080))
@@ -83,6 +86,7 @@ def crossoutClick(circx):
 
 
 while True:
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
