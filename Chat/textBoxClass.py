@@ -18,7 +18,7 @@ class TextBox:
         self.active = False
         self.text = ""
         self.textSize = textSize
-        self.font = pygame.font("comic sands", self.textSize)
+        self.font = ("arial")
         self.border_color = border_color
         self.border = border
         self.numbers = [48,49, 50, 51, 53, 54, 55, 56, 57,
