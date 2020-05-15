@@ -7,6 +7,7 @@ textBoxes = []
 textBoxes.append(TextBox(40, 100, 200, 50, border=3))
 # textBoxes.append(TextBox(40,100, 200, 50, text_size  = 36))
 while True:
+    window.fill((54, 54, 54))
     for event in pygame.event.get():
         if event.type == pygame.quit():
             pygame.quit()
@@ -18,7 +19,7 @@ while True:
             for box in textBoxes:
                 if box.active:
                     box.add_text(event.key)
-    window.fill(54, 54, 54)
+
     for box in textBoxes:
         box.draw(window)
-    pygame.display.update
+    pygame.display.update()
