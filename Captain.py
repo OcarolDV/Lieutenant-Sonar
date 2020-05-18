@@ -1,10 +1,19 @@
 import pygame
 import random
+from network import Network
 
 pygame.init()
 
+clientNumber = 0
+
+n = Network()
+# startPos = n.getTurn()
+
+
+
+
 win = pygame.display.set_mode((1920, 1080))
-pygame.display.set_caption("Main Menu")
+pygame.display.set_caption("Captain")
 
 bg = pygame.image.load('CaptainSonarMAp.jpg')
 bg = pygame.transform.scale(bg, (1920, 1080))
@@ -18,10 +27,11 @@ rowDict = {"A": 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 
 rowDictNum = {1 : "A", 2 : "B", 3 : "C", 4 : "D", 5 : "E", 6 : "F", 7 : "G", 8 : "H", 9 : "I", 10 : "J", 11 : "K", 12 : "L", 13 : "M", 14 : "N", 15 : "O"}
 
 # startPos = input("What sector would you like to start? Enter row and column like G3 ")
-startPos = "G6"
 
-rowNum = rowDict[startPos[0]]
-column = int(startPos[1])
+startPosD = "G6"
+
+rowNum = rowDict[startPosD[0]]
+column = int(startPosD[1])
 
 
 
@@ -74,13 +84,28 @@ posLine = []
 
 myMove = True
 
+
+startPos = int(n.getPos())
+p = startPos
+P2posInDots = 0
+clock = pygame.time.Clock()
+
 while True:
     (mouseX, mouseY) = pygame.mouse.get_pos()
-    print (mouseX, mouseY)
+    # print (mouseX, mouseY)
     pressed1, pressed2, pressed3 = pygame.mouse.get_pressed()
     win.blit(bg, (0, 0))
-    posInDots = dots.index(currentDot)
-    pygame.draw.circle(win, (255, 0, 0), (currentDot.x, currentDot.y), currentDot.radius)
+
+
+    P1posInDots = dots.index(currentDot)
+
+    clock.tick(60)
+    p2pos = int(n.send(str(p)))
+    P2posInDots = p2pos
+
+
+
+    # pygame.draw.circle(win, (255, 0, 0), (currentDot.x, currentDot.y), currentDot.radius)
 
     # pygame.draw.rect(win, (255,0,0), (aDot.x, aDot.y, aDot.width, aDot.height))
 
@@ -100,7 +125,7 @@ while True:
             if dot.y - 7 < mouseY < dot.y + 7:
                 if dot.x - 7 < mouseX < dot.x + 7:
                     if (currentDot.x + 80 > dot.x) and (currentDot.x - 80 < dot.x) and (currentDot.y - 110 < dot.y) and (currentDot.y + 110 > dot.y) and\
-                    (dots.index(dot) != posInDots + 16) and (dots.index(dot) != posInDots - 16) and (dots.index(dot) != posInDots + 14) and (dots.index(dot) != posInDots - 14):
+                    (dots.index(dot) != P1posInDots + 16) and (dots.index(dot) != P1posInDots - 16) and (dots.index(dot) != P1posInDots + 14) and (dots.index(dot) != P1posInDots - 14):
                         if dot not in islandDot:
 
                             pygame.draw.circle(win, (20, 255, 20), (dot.x, dot.y), dot.radius)
@@ -108,6 +133,8 @@ while True:
                             if pressed1:
                                 posLine.append(((currentDot.x, currentDot.y), (dot.x, dot.y)))
                                 currentDot = dot
+                                P1posInDots = dots.index(currentDot)
+                                print(P1posInDots)
                     else:
                         pygame.draw.circle(win, (255, 20, 20), (dot.x, dot.y), dot.radius)
         elif initDotState == True:
@@ -117,7 +144,12 @@ while True:
                         pygame.draw.circle(win, (20, 255, 20), (dot.x, dot.y), dot.radius)
                         if pressed1:
                             currentDot = dot
+                            P1posInDots = dots.index(currentDot)
+                            print (P1posInDots)
                             initDotState = False
+
+    # pygame.draw.circle(win, (75, 100, 255), (dots[p2pos].x, dots[p2pos].y), currentDot.radius + 5)
+
 
     if initDotState == True:
         win.blit(initDot, (1150, 45))
