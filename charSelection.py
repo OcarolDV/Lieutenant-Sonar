@@ -71,5 +71,3 @@ def CharSelect():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
-CharSelect()

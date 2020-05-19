@@ -1,6 +1,6 @@
 import pygame
 import random
-import DotGAME
+
 import LoadingScreen
 
 from networkTutorial import Network
