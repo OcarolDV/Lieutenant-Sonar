@@ -1,6 +1,8 @@
 import pygame
 import random
 from network import Network
+from _thread import *
+import time
 
 pygame.init()
 
@@ -8,7 +10,32 @@ n = Network()
 # startPos = n.getTurn()
 
 
+bgd = pygame.image.load('DGbg.jpeg')
+bgd = pygame.transform.scale(bgd, (500, 800))
 
+
+
+
+counterfont = pygame.font.SysFont('comicsans', 128, True, True)
+timeAllowance = 8.25
+
+class dotParent(object):
+
+    def __init__(self, x, y, radius):
+        self.x = x
+        self.y = y
+        self.radius = radius
+
+dotg = dotParent(random.randint(1386, 1386+500), random.randint(179, 179+800), 20)
+
+counter = 10
+miliseconds = 8.25 * 1000
+revealtext = "Last Move Revealed!"
+revealTextblit = counterfont.render(revealtext, 1, (255, 255, 255))
+trueTimePast = pygame.time.get_ticks()
+cooldownCounter1 = 0
+
+reveal = True
 
 win = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Captain")
@@ -93,9 +120,13 @@ startPos = n.getPos()
 p = startPos
 p2 = 0
 
+
 while True:
+
+
+
     (mouseX, mouseY) = pygame.mouse.get_pos()
-    # print (mouseX, mouseY)
+    print (mouseX, mouseY)
     pressed1, pressed2, pressed3 = pygame.mouse.get_pressed()
     win.blit(bg, (0, 0))
 
@@ -167,12 +198,74 @@ while True:
     for pos in posLine:
         pygame.draw.line(win, (5, 5, 5), pos[0], pos[1], width)
 
+    win.blit(bgd, (1386, 179))
+    counterText = counterfont.render('' + str(counter), 1, (255, 255, 255))
+    win.blit(counterText, (1800, 10))
+    cooldownCounter = pygame.time.get_ticks() - cooldownCounter1
+
     pygame.display.update()
 
     pos = rowDictNum[rowNum] + str(column)
     # print(pos)
 
+    (mouseX, mouseY) = pygame.mouse.get_pos()
+    (button1, button2, button3) = pygame.mouse.get_pressed()
+
+    pygame.draw.circle(win, (255, 0, 0), (dotg.x, dotg.y), dotg.radius)
+
+
+    if (((mouseX <= dotg.x + dotg.radius) and (mouseX >= dotg.x - dotg.radius)) and (
+            (mouseY <= dotg.y + dotg.radius) and (mouseY >= dotg.y - dotg.radius))):
+        if button1 == True:
+            dotg = dotParent(random.randint(1386, 1386+500), random.randint(179, 179+800), 20)
+            counter -= 1
+            pygame.display.update()
+            if counter == 0:
+                win.blit(revealTextblit, (500,10))
+                pygame.display.update()
+                pygame.time.wait(1000)
+                counter = 10
+
+
+    # if (((mouseX >= dot.x + dot.radius) and (mouseX <= dot.x - dot.radius)) and ((mouseY >= dot.y + dot.radius) and (mouseY <= dot.y - dot.radius))) and button1 == True:
+    #     dotg = dotParent(random.randint(1, 1280), random.randint(0, 720), 20)
+    #     miliseconds -= 1*1000
+    #     win.fill((0, 0, 0))
+
+
+
+    pygame.display.update()
+
+
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+
+    # clock = pygame.time.Clock()
+    # input_box1 = InputBox(1500, 300, 140, 32)
+    # input_box2 = InputBox(1500, 500, 140, 32)
+    # input_boxes = [input_box1, input_box2]
+    # done = False
+    #
+    # if not done:
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             done = True
+    #         for box in input_boxes:
+    #             box.handle_event(event)
+    #         if event.type == pygame.QUIT:
+    #             pygame.quit()
+    #             quit()
+    #
+    #     for box in input_boxes:
+    #         box.update()
+    #
+    #     pygame.draw.rect(win, (200, 200, 200), (200, 150, 100, 50))
+    #     for box in input_boxes:
+    #         box.draw(win)
+    #
+    # pygame.display.flip()
+    # clock.tick(30)
